@@ -1,11 +1,46 @@
 <script setup lang="ts">
 import type { InputType } from "~/components/eyeIcon.vue";
+import type RefreshResponse from "~/types/auth/refreshResponse";
 
 definePageMeta({
     layout: "auth",
 });
 
+const accessToken = useAccessToken();
+
+const route = useRouter();
+
+const email = ref("");
+const password = ref("");
+
 const passwordType = ref<InputType>("password");
+
+// TODO: add baseUrl to env
+const { data, execute } = useFetch<RefreshResponse>("/auth/login", {
+    baseURL: "http://localhost:5000/",
+    method: "post",
+    body: {
+        email,
+        password,
+    },
+    immediate: false,
+    credentials: "include",
+    watch: false,
+    onResponse: () => {
+        console.log("here");
+
+        if (data.value) {
+            if (data.value && data.value.accessToken) {
+                accessToken.value = data.value.accessToken;
+            }
+            route.push({ path: "/" });
+        }
+    },
+});
+
+function onLogin() {
+    execute();
+}
 </script>
 
 <template>
@@ -13,10 +48,17 @@ const passwordType = ref<InputType>("password");
         class="w-full h-full flex flex-col text-grayText items-center justify-center p-8 gap-8"
     >
         <h1 class="text-4xl">Login</h1>
-        <form class="flex flex-col w-full gap-6 items-center">
-            <input type="text" placeholder="email" />
+        <form
+            class="flex flex-col w-full gap-6 items-center"
+            @submit.prevent="onLogin()"
+        >
+            <input type="text" placeholder="email" v-model="email" />
             <div class="relative w-full">
-                <input :type="passwordType" placeholder="password" />
+                <input
+                    :type="passwordType"
+                    placeholder="password"
+                    v-model="password"
+                />
                 <EyeIcon
                     @text="passwordType = 'text'"
                     @password="passwordType = 'password'"
