@@ -7,6 +7,7 @@ export default {
                 dark: "#0D0D0D",
                 darkShade: "#1F1F1F",
                 lightShade: "#282828",
+                light: "#4c4c4c",
                 grayText: "#C2C2C2",
             },
             backgroundImage: {
