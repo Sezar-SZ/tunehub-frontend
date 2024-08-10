@@ -6,6 +6,12 @@ export default defineNuxtConfig({
 
     css: ["~/assets/css/main.css"],
 
+    runtimeConfig: {
+        public: {
+            API_URL: process.env.API_URL,
+        },
+    },
+
     app: {
         head: {
             link: [

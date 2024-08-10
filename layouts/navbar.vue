@@ -1,6 +1,11 @@
 <script setup lang="ts">
 const authIsChecked = useAuthIsChecked();
 const accessToken = useAccessToken();
+
+const { data, execute } = useProtectedFetch("/auth", {
+    server: false,
+    watch: false,
+});
 </script>
 
 <template>
@@ -10,7 +15,10 @@ const accessToken = useAccessToken();
             <NuxtLink to="/" class="link">Search</NuxtLink>
             <NuxtLink to="/login" class="link">Login</NuxtLink>
             <span>{{ JSON.stringify(authIsChecked) }}</span>
-            <span>{{ JSON.stringify(accessToken) }}</span>
+            <span>{{ JSON.stringify(accessToken.slice(0, 5)) }}</span>
+            <button @click="execute()" class="bg-green-300 text-white">
+                fetch!
+            </button>
         </nav>
 
         <slot />
