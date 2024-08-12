@@ -27,8 +27,6 @@ const { data, execute } = useFetch<RefreshResponse>("/auth/login", {
     credentials: "include",
     watch: false,
     onResponse: () => {
-        console.log("here");
-
         if (data.value) {
             if (data.value && data.value.accessToken) {
                 accessToken.value = data.value.accessToken;

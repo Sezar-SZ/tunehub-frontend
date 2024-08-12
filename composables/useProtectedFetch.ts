@@ -4,7 +4,7 @@ import defu from "defu";
 import type { UseFetchOptions } from "nuxt/app";
 
 interface Response {
-    access_token: string;
+    accessToken: string;
 }
 
 export function useProtectedFetch<T>(
@@ -15,8 +15,6 @@ export function useProtectedFetch<T>(
 
     const accessToken = useAccessToken();
 
-    console.log({ env: process.env.API_URL });
-
     const defaults: UseFetchOptions<T> = {
         baseURL: config.public.API_URL,
         retry: 1,
@@ -25,13 +23,17 @@ export function useProtectedFetch<T>(
 
         onRequest({ options }) {
             if (accessToken.value) {
+                if (!options.headers) {
+                    options.headers = {};
+                }
+
                 options.headers = {
                     ...options.headers,
-                    Authorization: `Bearer ${accessToken}`,
+                    Authorization: `Bearer ${accessToken.value}`,
                 };
             }
         },
-        async onResponseError({ response, options, request, error }) {
+        async onResponseError({ response, error }) {
             if (response.status === 401) {
                 const refreshResponse = await $fetch<Response>(
                     "/auth/refresh",
@@ -40,26 +42,11 @@ export function useProtectedFetch<T>(
                         credentials: "include",
                     }
                 );
-                if (refreshResponse.access_token) {
-                    accessToken.value = refreshResponse.access_token;
-
-                    options.headers = {
-                        ...options.headers,
-                        Authorization: `Bearer ${refreshResponse.access_token}`,
-                    };
-
-                    return $fetch(request, {
-                        ...options,
-                        method: options.method as Method,
-                    });
-                } else throw error;
-                // .then((response) => {
-                //     accessToken.value = response?.access_token;
-                //     return response;
-                // })
-                // .catch((error) => {
-                //     return error;
-                // });
+                if (refreshResponse.accessToken) {
+                    accessToken.value = refreshResponse.accessToken;
+                } else {
+                    throw error;
+                }
             }
         },
     };
@@ -67,15 +54,3 @@ export function useProtectedFetch<T>(
     const params = defu(_options, defaults);
     return useFetch(url, params);
 }
-
-type Method =
-    | "GET"
-    | "HEAD"
-    | "PATCH"
-    | "POST"
-    | "PUT"
-    | "DELETE"
-    | "CONNECT"
-    | "OPTIONS"
-    | "TRACE"
-    | undefined;
