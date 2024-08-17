@@ -1,11 +1,38 @@
 <script setup lang="ts">
 import type { InputType } from "~/components/eyeIcon.vue";
+import type RefreshResponse from "~/types/auth/refreshResponse";
 
 definePageMeta({
     layout: "auth",
 });
 
 const passwordType = ref<InputType>("password");
+
+const route = useRouter();
+
+const email = ref("");
+const username = ref("");
+const password = ref("");
+
+const { execute, error } = useFetch<RefreshResponse>("/auth/register", {
+    baseURL: "http://localhost:5000",
+    method: "post",
+    body: {
+        email,
+        password,
+        username,
+    },
+    immediate: false,
+    credentials: "include",
+    watch: false,
+    onResponse: () => {
+        if (!error.value) route.push({ path: "/login" });
+    },
+});
+
+function onRegister() {
+    execute();
+}
 </script>
 
 <template>
@@ -13,10 +40,18 @@ const passwordType = ref<InputType>("password");
         class="w-full h-full flex flex-col text-grayText items-center justify-center p-8 gap-8"
     >
         <h1 class="text-4xl">Register</h1>
-        <form class="flex flex-col w-full gap-6 items-center">
-            <input type="text" placeholder="email" />
+        <form
+            class="flex flex-col w-full gap-6 items-center"
+            @submit.prevent="onRegister()"
+        >
+            <input type="text" placeholder="email" v-model="email" />
+            <input type="text" placeholder="username" v-model="username" />
             <div class="relative w-full">
-                <input :type="passwordType" placeholder="password" />
+                <input
+                    :type="passwordType"
+                    placeholder="password"
+                    v-model="password"
+                />
                 <EyeIcon
                     @text="passwordType = 'text'"
                     @password="passwordType = 'password'"

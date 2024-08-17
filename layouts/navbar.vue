@@ -1,5 +1,4 @@
 <script setup lang="ts">
-const authIsChecked = useAuthIsChecked();
 const accessToken = useAccessToken();
 </script>
 
@@ -8,9 +7,10 @@ const accessToken = useAccessToken();
         <nav class="flex justify-center gap-16 bg-darkShade py-6">
             <NuxtLink to="/" class="link">Playlists</NuxtLink>
             <NuxtLink to="/" class="link">Search</NuxtLink>
-            <NuxtLink to="/login" class="link">Login</NuxtLink>
-            <span>{{ JSON.stringify(authIsChecked) }}</span>
-            <span>{{ JSON.stringify(accessToken.slice(0, 5)) }}</span>
+            <NuxtLink v-if="!accessToken" to="/login" class="link"
+                >Login</NuxtLink
+            >
+            <NavbarLogout v-else />
         </nav>
 
         <slot />

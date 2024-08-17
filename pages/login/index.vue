@@ -15,9 +15,7 @@ const password = ref("");
 
 const passwordType = ref<InputType>("password");
 
-// TODO: add baseUrl to env
-const { data, execute } = useFetch<RefreshResponse>("/auth/login", {
-    baseURL: "http://localhost:5000/",
+const { execute } = usePublicFetch<RefreshResponse>("/auth/login", {
     method: "post",
     body: {
         email,
@@ -26,11 +24,13 @@ const { data, execute } = useFetch<RefreshResponse>("/auth/login", {
     immediate: false,
     credentials: "include",
     watch: false,
-    onResponse: () => {
-        if (data.value) {
-            if (data.value && data.value.accessToken) {
-                accessToken.value = data.value.accessToken;
+    onResponse: (e) => {
+        if (e.response._data) {
+            if (e.response._data && e.response._data.accessToken) {
+                accessToken.value = e.response._data.accessToken;
             }
+            console.log("here");
+
             route.push({ path: "/" });
         }
     },
