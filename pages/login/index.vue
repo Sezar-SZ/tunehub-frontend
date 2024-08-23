@@ -10,6 +10,8 @@ const accessToken = useAccessToken();
 
 const route = useRouter();
 
+const { $toast } = useNuxtApp();
+
 const email = ref("");
 const password = ref("");
 
@@ -25,13 +27,11 @@ const { execute } = usePublicFetch<RefreshResponse>("/auth/login", {
     credentials: "include",
     watch: false,
     onResponse: (e) => {
-        if (e.response._data) {
-            if (e.response._data && e.response._data.accessToken) {
-                accessToken.value = e.response._data.accessToken;
-            }
-            console.log("here");
-
+        if (e.response.status === 200 && e.response._data.accessToken) {
+            accessToken.value = e.response._data.accessToken;
             route.push({ path: "/" });
+        } else {
+            $toast.error("Wrong Email or Password");
         }
     },
 });

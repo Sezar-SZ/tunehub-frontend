@@ -4,7 +4,10 @@ export default defineNuxtConfig({
     devtools: { enabled: true },
     modules: ["@nuxtjs/tailwindcss", "@nuxt/image", "@vee-validate/nuxt"],
 
-    css: ["~/assets/css/main.css"],
+    css: [
+        "~/assets/css/main.css",
+        "vue-toast-notification/dist/theme-default.css",
+    ],
 
     runtimeConfig: {
         public: {

@@ -7,6 +7,8 @@ definePageMeta({
     layout: "auth",
 });
 
+const { $toast } = useNuxtApp();
+
 const passwordType = ref<InputType>("password");
 
 const route = useRouter();
@@ -19,7 +21,7 @@ const { value: email } = useField("email");
 const { value: username } = useField("username");
 const { value: password } = useField("password");
 
-const { execute, error } = useFetch<RefreshResponse>("/auth/register", {
+const { execute, error, data } = useFetch<RefreshResponse>("/auth/register", {
     baseURL: "http://localhost:5000",
     method: "post",
     body: {
@@ -30,8 +32,12 @@ const { execute, error } = useFetch<RefreshResponse>("/auth/register", {
     immediate: false,
     credentials: "include",
     watch: false,
-    onResponse: () => {
-        if (!error.value) route.push({ path: "/login" });
+
+    onResponse: (e) => {
+        if (e.response.status === 201) route.push({ path: "/login" });
+        else {
+            $toast.error(e.response._data.error || "Something Went Wrong");
+        }
     },
 });
 
