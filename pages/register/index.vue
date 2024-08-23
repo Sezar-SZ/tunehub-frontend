@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { InputType } from "~/components/eyeIcon.vue";
+import registerSchema from "~/schemas/register";
 import type RefreshResponse from "~/types/auth/refreshResponse";
 
 definePageMeta({
@@ -10,9 +11,13 @@ const passwordType = ref<InputType>("password");
 
 const route = useRouter();
 
-const email = ref("");
-const username = ref("");
-const password = ref("");
+const { handleSubmit, errors } = useForm({
+    validationSchema: registerSchema,
+});
+
+const { value: email } = useField("email");
+const { value: username } = useField("username");
+const { value: password } = useField("password");
 
 const { execute, error } = useFetch<RefreshResponse>("/auth/register", {
     baseURL: "http://localhost:5000",
@@ -30,9 +35,10 @@ const { execute, error } = useFetch<RefreshResponse>("/auth/register", {
     },
 });
 
-function onRegister() {
-    execute();
-}
+const onRegister = handleSubmit((values) => execute());
+
+// TODO: make it lazy to only show on submit
+const showErrors = ref(true);
 </script>
 
 <template>
@@ -42,14 +48,35 @@ function onRegister() {
         <h1 class="text-4xl">Register</h1>
         <form
             class="flex flex-col w-full gap-6 items-center"
-            @submit.prevent="onRegister()"
+            @submit="onRegister"
         >
-            <input type="text" placeholder="email" v-model="email" />
-            <input type="text" placeholder="username" v-model="username" />
+            <div class="input-wrapper">
+                <input
+                    type="text"
+                    name="email"
+                    placeholder="email"
+                    v-model="email"
+                />
+                <span v-if="showErrors" class="error">{{ errors.email }}</span>
+            </div>
+
+            <div class="input-wrapper">
+                <input
+                    type="text"
+                    name="password"
+                    placeholder="username"
+                    v-model="username"
+                />
+                <span v-if="showErrors" class="error">{{
+                    errors.username
+                }}</span>
+            </div>
+
             <div class="relative w-full">
                 <input
                     :type="passwordType"
                     placeholder="password"
+                    name="password"
                     v-model="password"
                 />
                 <EyeIcon
@@ -58,6 +85,9 @@ function onRegister() {
                     :password-type="passwordType"
                     class="absolute right-4 top-1/2 -translate-y-1/2"
                 />
+                <span v-if="showErrors" class="error">{{
+                    errors.password
+                }}</span>
             </div>
 
             <button
@@ -77,5 +107,13 @@ function onRegister() {
 <style lang="postcss" scoped>
 input {
     @apply w-full p-4 rounded border border-light bg-transparent;
+}
+
+.input-wrapper {
+    @apply w-full;
+}
+
+.error {
+    @apply text-red-500 text-sm;
 }
 </style>
