@@ -1,10 +1,10 @@
 <template>
-    <PlaylistsDesktopSidebar />
-    <PlaylistsMobileSidebar
+    <PlaylistsSidebarDesktop />
+    <PlaylistsSidebarMobile
         :visible="isMobileSidebarVisible"
         @hide="isMobileSidebarVisible = false"
     />
-    <div class="w-full flex p-4">
+    <div class="w-full flex xl:hidden p-4">
         <Button
             icon="pi pi-bars"
             class="!text-gray-400 !text-3xl"

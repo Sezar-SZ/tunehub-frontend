@@ -1,16 +1,17 @@
 <template>
     <Drawer
         :visible="props.visible"
-        class="!bg-darkShade xl:hidden"
+        class="!bg-darkShade xl:hidden px-4"
         close-icon="none"
     >
-        <div class="w-full px-4 flex justify-end">
+        <div class="w-full flex justify-end mb-5">
             <Button
                 icon="pi pi-times"
                 class="!text-gray-500 !text-3xl"
                 @click="$emit('hide')"
             />
         </div>
+        <PlaylistsSidebarData />
     </Drawer>
 </template>
 

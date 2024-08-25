@@ -1,5 +1,5 @@
 <template>
     <div class="w-screen h-screen bg-dark">
-        <PlaylistsSidebar />
+        <PlaylistsSidebarComponent />
     </div>
 </template>

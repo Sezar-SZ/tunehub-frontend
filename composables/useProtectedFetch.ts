@@ -17,6 +17,7 @@ export function useProtectedFetch<T>(
 
     const defaults: UseFetchOptions<T> = {
         baseURL: config.public.API_URL,
+        // don't override retry value
         retry: 1,
         credentials: "include",
         retryStatusCodes: [401],
