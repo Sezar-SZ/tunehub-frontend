@@ -10,6 +10,7 @@
                 <input
                     type="text"
                     placeholder="Playlist Name"
+                    autofocus
                     v-model="playlistName"
                     class="border py-2 px-3 rounded bg-light focus:outline-none focus:border-gray-400 text-gray-300"
                     :class="error ? 'border-red-500' : 'border-light'"
@@ -44,25 +45,27 @@ interface Props {
 }
 
 const props = defineProps<Props>();
-const emit = defineEmits(["hide"]);
+const emit = defineEmits(["hide", "submit"]);
 
 const playlistName = ref("");
 const isDraft = ref(false);
 const error = ref(false);
 
-const { data, execute } = await useProtectedFetch("/playlists", {
-    server: false,
-    watch: false,
-    immediate: false,
-    lazy: true,
-    body: {
+const body = computed(() => {
+    return {
         name: playlistName.value,
         published: !isDraft.value,
-    },
+    };
+});
+
+const { execute } = await useProtectedFetch("/playlists", {
+    immediate: false,
+    body,
     method: props.update ? "PUT" : "POST",
+    watch: false,
     onResponse: (e) => {
         if (e.response.status === 201 && e.response.status === 201) {
-            emit("hide");
+            emit("submit");
         }
     },
 });

@@ -1,23 +1,19 @@
 <template>
     <PlaylistsSidebarDesktop />
     <PlaylistsSidebarMobile
-        :visible="isMobileSidebarVisible"
-        @hide="isMobileSidebarVisible = false"
+        :visible="drawerVisible"
+        @hide="drawerVisible = false"
     />
     <div class="w-full flex xl:hidden p-4">
         <Button
             icon="pi pi-bars"
             class="!text-gray-400 !text-3xl"
-            @click="toggleMobileDrawer()"
+            @click="drawerVisible = true"
         />
         >
     </div>
 </template>
 
 <script setup lang="ts">
-const isMobileSidebarVisible = ref(false);
-
-const toggleMobileDrawer = () => {
-    isMobileSidebarVisible.value = !isMobileSidebarVisible.value;
-};
+const drawerVisible = ref(false);
 </script>
