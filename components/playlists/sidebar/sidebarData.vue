@@ -1,6 +1,6 @@
 <template>
     <div class="h-full flex flex-col">
-        <div class="w-full flex items-center justify-between gap-8">
+        <div class="w-full flex items-center justify-between gap-8 px-4 pt-6">
             <div class="flex gap-3 items-center">
                 <i class="pi pi-list !text-3xl !text-gray-400" />
                 <span class="text-gray-300 text-2xl">Your Playlists</span>

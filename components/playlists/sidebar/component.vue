@@ -1,3 +1,5 @@
+<!-- TODO: make this and the search bar a layout... -->
+
 <template>
     <PlaylistsSidebarDesktop />
     <PlaylistsSidebarMobile
