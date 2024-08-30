@@ -1,5 +1,8 @@
+<script setup lang="ts">
+definePageMeta({
+    layout: "app",
+});
+</script>
 <template>
-    <div class="w-screen h-screen bg-dark">
-        <PlaylistsSidebarComponent />
-    </div>
+    <span class="text-white"> page</span>
 </template>
