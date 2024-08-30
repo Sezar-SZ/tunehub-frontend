@@ -13,15 +13,16 @@
 </template>
 
 <script setup lang="ts">
+const router = useRouter();
 const val = ref("");
 
-const emitDebouncedValue = (value: string) => {
-    console.log("Debounced value:", value);
+const onDebouncedValue = (value: string) => {
+    if (value.trim()) router.push(`/app/search?q=${val.value}`);
 };
 
-const debouncedEmit = useDebounce(emitDebouncedValue, 600);
+const registerDebounce = useDebounce(onDebouncedValue, 600);
 
 watch(val, (newValue) => {
-    debouncedEmit(newValue);
+    registerDebounce(newValue);
 });
 </script>
