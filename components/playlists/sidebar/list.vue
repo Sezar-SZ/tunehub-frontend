@@ -19,5 +19,5 @@ interface Props {
     playlists: Playlist[];
 }
 
-const props = defineProps<Props>();
+defineProps<Props>();
 </script>
