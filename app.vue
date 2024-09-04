@@ -21,6 +21,33 @@ watch(status, () => {
         }
     }
 });
+
+// TODO: refactor this...
+
+const audioSrc = usePlayingSong();
+const audio = ref<HTMLAudioElement | null>(null);
+
+function pauseAudio() {
+    if (audio.value) {
+        audio.value.pause();
+
+        audio.value.currentTime = 0;
+    }
+}
+
+function playAudio(src: string) {
+    pauseAudio();
+
+    if (src) {
+        audio.value = new Audio();
+        audio.value.src = src;
+        audio.value.play();
+    }
+}
+
+watch(audioSrc, (newAudio) => {
+    playAudio(newAudio);
+});
 </script>
 
 <template>

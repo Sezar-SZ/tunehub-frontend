@@ -5,7 +5,7 @@ const accessToken = useAccessToken();
 <template>
     <div class="w-screen h-screen flex flex-col overflow-hidden">
         <nav class="flex justify-center gap-16 bg-darkShade py-6">
-            <NuxtLink to="/playlists" class="link">Playlists</NuxtLink>
+            <NuxtLink to="/app" class="link">Playlists</NuxtLink>
             <NuxtLink to="/" class="link">Search</NuxtLink>
             <NuxtLink v-if="!accessToken" to="/login" class="link"
                 >Login</NuxtLink
