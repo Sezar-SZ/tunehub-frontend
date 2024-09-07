@@ -13,11 +13,14 @@
                     @play="(src) => setCurrentSongSrc(src)"
                 />
             </div>
-            <div class="w-full">
+            <div class="w-full flex flex-col">
                 <span class="text-white text-sm xl:text-base line-clamp-2">{{
                     song.title
                 }}</span>
-                <span class="text-gray-400">{{ song.artist.name }}</span>
+                <div class="flex items-center justify-between">
+                    <span class="text-gray-400">{{ song.artist.name }}</span>
+                    <PlaylistsAddToBtn :song-id="song.id" />
+                </div>
             </div>
         </div>
     </div>
