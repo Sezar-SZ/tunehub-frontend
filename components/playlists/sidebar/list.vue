@@ -1,6 +1,7 @@
 <template>
     <div class="flex flex-col mt-6 h-full overflow-auto">
-        <div
+        <NuxtLink
+            :href="`/app/my-playlists/${playlist.id}`"
             v-for="playlist in playlists"
             class="w-full px-6 py-4 flex justify-between items-center hover:bg-light"
         >
@@ -8,7 +9,7 @@
             <span class="text-gray-300 text-sm pr-2">{{
                 playlist.published ? "Published" : "Draft"
             }}</span>
-        </div>
+        </NuxtLink>
     </div>
 </template>
 

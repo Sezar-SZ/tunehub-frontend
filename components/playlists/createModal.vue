@@ -41,7 +41,7 @@
 <script setup lang="ts">
 interface Props {
     visible: boolean;
-    update?: boolean;
+    id?: boolean;
 }
 
 const props = defineProps<Props>();
@@ -52,6 +52,13 @@ const isDraft = ref(false);
 const error = ref(false);
 
 const body = computed(() => {
+    if (props.id) {
+        return {
+            name: playlistName.value,
+            published: !isDraft.value,
+            id: props.id,
+        };
+    }
     return {
         name: playlistName.value,
         published: !isDraft.value,
@@ -61,10 +68,10 @@ const body = computed(() => {
 const { execute } = await useProtectedFetch("/playlists", {
     immediate: false,
     body,
-    method: props.update ? "PUT" : "POST",
+    method: props.id ? "PUT" : "POST",
     watch: false,
     onResponse: (e) => {
-        if (e.response.status === 201 && e.response.status === 201) {
+        if (e.response.status === 200 || e.response.status === 201) {
             emit("submit");
         }
     },

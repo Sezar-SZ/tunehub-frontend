@@ -10,7 +10,6 @@
         class="!text-gray-400 !text-3xl !fixed top-2 left-2 xl:!hidden"
         @click="drawerVisible = true"
     />
-    >
 </template>
 
 <script setup lang="ts">

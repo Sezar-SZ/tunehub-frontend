@@ -3,4 +3,4 @@ definePageMeta({
     layout: "app",
 });
 </script>
-<template>page</template>
+<template></template>

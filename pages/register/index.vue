@@ -22,7 +22,7 @@ const { value: username } = useField("username");
 const { value: password } = useField("password");
 
 const { execute, error, data } = useFetch<RefreshResponse>("/auth/register", {
-    baseURL: "http://localhost:5000",
+    baseURL: process.env.API_URL,
     method: "post",
     body: {
         email,
