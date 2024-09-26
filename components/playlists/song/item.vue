@@ -4,32 +4,38 @@
             <span>{{ listPosition }}</span>
             <div class="w-16 h-16 relative flex justify-center group">
                 <img
-                    :src="song.cover"
-                    :alt="song.title"
+                    :src="track.song.cover"
+                    :alt="track.song.title"
                     class="object-cover aspect-square w-full rounded-md"
                 />
                 <PlaylistsSearchSongPlayBtn
                     class="group-hover:opacity-100"
-                    :src="song.preview"
+                    :src="track.song.preview"
                     @play="(src) => setCurrentSongSrc(src)"
                 />
             </div>
             <div class="flex flex-col justify-center">
-                <span class="text-white line-clamp-1">{{ song.title }}</span>
+                <span class="text-white line-clamp-1">{{
+                    track.song.title
+                }}</span>
                 <span class="text-gray-400 line-clamp-1">{{
-                    song.artist
+                    track.song.artist
                 }}</span>
             </div>
         </div>
-        <PlaylistsSongDeleteBtn />
+        <PlaylistsSongDeleteBtn
+            :track-id="track.id"
+            @delete="$emit('delete')"
+        />
     </div>
 </template>
 
 <script setup lang="ts">
-// import Song from "~/types/songs";
+import type { Track } from "~/types/songs";
+
 interface Props {
     listPosition: number;
-    song: Song;
+    track: Track;
 }
 
 defineProps<Props>();

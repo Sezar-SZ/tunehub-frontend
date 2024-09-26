@@ -1,3 +1,8 @@
+export interface Track {
+    song: Song;
+    id: number;
+}
+
 export interface Song {
     id: number;
     readable: boolean;
@@ -15,6 +20,7 @@ export interface Song {
     artist: Artist;
     album: Album;
     type: SongResponseType;
+    cover: string;
 }
 
 export interface Album {

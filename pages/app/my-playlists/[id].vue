@@ -19,8 +19,10 @@
         <div class="flex flex-col mt-6 max-h-full overflow-y-auto">
             <PlaylistsSongItem
                 v-for="(track, index) in data.playlistTrack"
-                :song="track.song"
+                :key="track.id"
+                :track="track"
                 :list-position="index + 1"
+                @delete="execute()"
             />
         </div>
     </div>
@@ -30,19 +32,22 @@
         :visible="isCreateModalVisible"
         @hide="isCreateModalVisible = false"
         @submit="playlistSubmitted()"
-        :id="data.id"
+        :id="data?.id"
     />
 </template>
 
 <script setup lang="ts">
+import type { PlaylistFindOneResponse } from "~/types/playlists/FindOne";
+
 definePageMeta({
     layout: "app",
 });
 const route = useRoute();
+const router = useRouter();
 
 const isCreateModalVisible = ref(false);
 
-const { data, execute } = await useProtectedFetch<PlaylistsFindOneResponse>(
+const { data, execute } = await useProtectedFetch<PlaylistFindOneResponse>(
     `/playlists/${route.params.id}`,
     {
         server: false,

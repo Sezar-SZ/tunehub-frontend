@@ -41,7 +41,7 @@
 <script setup lang="ts">
 interface Props {
     visible: boolean;
-    id?: boolean;
+    id?: string;
 }
 
 const props = defineProps<Props>();
