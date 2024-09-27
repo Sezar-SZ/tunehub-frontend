@@ -24,6 +24,7 @@
             </div>
         </div>
         <PlaylistsSongDeleteBtn
+            v-if="ownedByUser"
             :track-id="track.id"
             @delete="$emit('delete')"
         />
@@ -36,6 +37,7 @@ import type { Track } from "~/types/songs";
 interface Props {
     listPosition: number;
     track: Track;
+    ownedByUser: boolean;
 }
 
 defineProps<Props>();

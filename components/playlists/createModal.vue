@@ -47,6 +47,7 @@ interface Props {
 const props = defineProps<Props>();
 const emit = defineEmits(["hide", "submit"]);
 
+const revalidateSidebarSignal = useRevalidateSidebarSignal();
 const playlistName = ref("");
 const isDraft = ref(false);
 const error = ref(false);
@@ -73,6 +74,7 @@ const { execute } = await useProtectedFetch("/playlists", {
     onResponse: (e) => {
         if (e.response.status === 200 || e.response.status === 201) {
             emit("submit");
+            revalidateSidebarSignal.value = !revalidateSidebarSignal.value; // TODO: find a better way to revalidate the sidebar
         }
     },
 });

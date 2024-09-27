@@ -24,13 +24,24 @@
 </template>
 
 <script setup lang="ts">
+import { useUserId } from "~/composables/states";
 import type { PlaylistsFindManyResponse } from "~/types/playlists/FindMany";
+
+const userId = useUserId();
+
+const revalidateSignal = useRevalidateSidebarSignal();
 
 const { data, execute } = await useProtectedFetch<PlaylistsFindManyResponse>(
     "/playlists",
     {
         server: false,
-        watch: false,
+        watch: [revalidateSignal],
+
+        onResponse: (e) => {
+            if (e.response.status === 200) {
+                userId.value = e.response._data.userId;
+            }
+        },
     }
 );
 

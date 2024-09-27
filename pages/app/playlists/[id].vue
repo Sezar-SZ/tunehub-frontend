@@ -10,14 +10,21 @@
                     icon="pi pi-pen-to-square"
                     class="!text-gray-400 !text-4xl"
                     @click="isCreateModalVisible = true"
+                    v-if="isOwnedByUser"
+                />
+                <Button
+                    icon="pi pi-share-alt"
+                    class="!text-gray-400 !text-4xl"
+                    @click="copyUrlToClipboard()"
                 />
             </div>
-            <span class="text-xl">{{
+            <span class="text-xl" v-if="isOwnedByUser">{{
                 data.published ? "Published" : "Draft"
             }}</span>
         </div>
         <div class="flex flex-col mt-6 max-h-full overflow-y-auto">
             <PlaylistsSongItem
+                :owned-by-user="isOwnedByUser"
                 v-for="(track, index) in data.playlistTrack"
                 :key="track.id"
                 :track="track"
@@ -37,13 +44,16 @@
 </template>
 
 <script setup lang="ts">
+import { useUserId } from "~/composables/states";
 import type { PlaylistFindOneResponse } from "~/types/playlists/FindOne";
 
 definePageMeta({
     layout: "app",
 });
 const route = useRoute();
-const router = useRouter();
+const userId = useUserId();
+
+const isOwnedByUser = computed(() => data.value?.creatorId === userId.value);
 
 const isCreateModalVisible = ref(false);
 
@@ -59,4 +69,10 @@ const playlistSubmitted = () => {
     isCreateModalVisible.value = false;
     execute();
 };
+
+async function copyUrlToClipboard() {
+    try {
+        await navigator.clipboard.writeText(window.location.href);
+    } catch (err) {}
+}
 </script>
